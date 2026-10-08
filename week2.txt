@@ -1,0 +1,61 @@
+Create a file called: lexer.l
+%{
+#include <stdio.h>
+%}
+
+%%
+
+"int"|"float"|"char"|"if"|"else"|"while"|"for"|"return"
+        { printf("%s -> KEYWORD\n", yytext); }
+
+[a-zA-Z_][a-zA-Z0-9_]*
+        { printf("%s -> IDENTIFIER\n", yytext); }
+
+[0-9]+
+        { printf("%s -> NUMBER\n", yytext); }
+
+"+"|"-"|"*"|"/"|"="
+        { printf("%s -> OPERATOR\n", yytext); }
+
+"("|")"|"{"|"}"|";"|","
+        { printf("%s -> SYMBOL\n", yytext); }
+
+"//".*
+        { /* ignore comment */ }
+
+[ \t\n]+
+        { /* ignore spaces */ }
+
+.
+        { printf("%s -> UNKNOWN\n", yytext); }
+
+%%
+
+int main()
+{
+    printf("Enter the input:\n");
+    yylex();
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
+Steps to execute:
+Step 1 — Create the file
+nano lexer.l
+
+Paste the code and save.
+Or create lexer.l directly in VS Code.
+Step 2 — Generate C code
+flex lexer.l
+
+This creates:
+lex.yy.c
+
+Step 3 — Compile
+gcc lex.yy.c -o lexer
+
+Step 4 — Run
+./lexer

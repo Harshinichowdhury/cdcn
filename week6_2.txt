@@ -1,0 +1,65 @@
+create xyz,y file:
+PROGRAM:
+%{
+#include <stdio.h>
+%}
+
+%token NUMBER
+
+%%
+
+E : E '+' T
+  | E '-' T
+  | T
+  ;
+
+T : T '*' F
+  | T '/' F
+  | F
+  ;
+
+F : '(' E ')'
+  | NUMBER
+  ;
+
+%%
+
+int yylex()
+{
+    char c;
+
+    c = getchar();
+
+    if (c >= '0' && c <= '9')
+    {
+        while ((c = getchar()) >= '0' && c <= '9');
+        return NUMBER;
+    }
+
+    return c;
+}
+
+int yyerror(char *s)
+{
+    printf("Invalid expression\n");
+    return 0;
+}
+
+int main()
+{
+    printf("Enter arithmetic expression: ");
+
+    if (yyparse() == 0)
+        printf("Valid expression\n");
+
+    return 0;
+}
+
+Step 1
+yacc -d expr.y
+
+Step 2
+gcc y.tab.c -o expr
+
+Step 3
+./expr

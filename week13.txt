@@ -1,0 +1,84 @@
+REQUIREMENTS :
+• Computer with Windows OS
+• IIS (Internet Information Services)
+• FTP Server
+• Network connection
+• FTP client / File Explorer
+• A folder containing files to share
+PROCEDURE :
+Step 1 - Enable FTP Server
+Open:
+Control Panel
+→ Programs
+→ Turn Windows features on or off
+Enable:
+Internet Information Services
+→ FTP Server
+→ FTP Service
+→ FTP Extensibility
+→ Web Management Tools
+→ IIS Management Console
+Click OK and allow Windows to install the required features
+Step 2 - Open IIS Manager
+Press:
+Windows + R
+Enter:
+inetmgr
+Press Enter.
+IIS Manager will open.
+Step 3 - Create FTP Folder
+Create a folder:
+C:\FTPServer
+Create a test file inside it: test.txt
+Example:
+C:\FTPServer
+│ └── test.txt
+Step 4 - Create FTP Site
+In IIS Manager:
+Sites
+↓
+Right Click
+↓
+Add FTP Site
+Enter:
+FTP Site Name : MyFTPServer
+Physical Path : C:\FTPServer
+Click Next
+Step 5 - Configure Binding
+Set:
+IP Address : All Unassigned
+Port : 21
+SSL : No SSL
+Click Next
+Step 6 - Configure Authentication
+Select:
+Authentication:
+☑ Basic
+For authorization:
+Allow access to: All Users
+Permissions:
+☑ Read
+☑ Write
+Click Finish
+Step 7 - Start FTP Server
+Select:
+MyFTPServer
+From the Actions panel, click:
+Start
+The FTP server is now running.
+TESTING THE FTP SERVER
+Open File Explorer and enter: ftp://localhost
+• A login window will appear
+• Enter the FTP username and password configured for the server.
+• After successful authentication, the shared folder will be displayed.
+Example:
+FTP Server
+└── test.txt
+COMMAND LINE TEST
+The FTP server can also be accessed using the command prompt:
+ftp localhost
+• Enter the username and password
+• Then use: dir to display the files
+• To download a file: get test.txt
+• To upload a file: put sample.txt
+• To exit: bye

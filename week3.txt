@@ -1,0 +1,93 @@
+grammar:
+E → T E'
+E' → + T E' | ε
+T → F T'
+T' → * F T' | ε
+F → ( E ) | id
+
+
+
+
+PROGRAM:
+#include <iostream>
+#include <set>
+#include <map>
+#include <vector>
+using namespace std;
+map<char, vector<string>> g;
+map<char, set<char>> first, follow;
+set<char> FIRST(char x)
+{
+if (!isupper(x))
+return {x};
+if (!first[x].empty())
+return first[x];
+for (string p : g[x]) {
+bool e = true;
+for (char c : p) {
+set<char> f = FIRST(c);
+for (char a : f)
+if (a != '#') first[x].insert(a);
+if (!f.count('#')) {
+e = false;
+break;
+}
+return first[x];
+}
+}
+}
+if (e) first[x].insert('#');
+int main()
+{
+
+cout << " FIRST AND FOLLOW SETS\n";
+
+g['E']={"TX"};
+g['X']={"+TX","#"};
+g['T']={"FY"};
+g['Y']={"*FY","#"};
+g['F']={"(E)","i"};
+for(char c : {'E','X','T','Y','F'})
+FIRST(c);
+follow['E'].insert('$');
+bool change = true;
+while(change) {
+change = false;
+for(auto [A, prods] : g)
+for(string p : prods)
+for(int i=0; i<p.size(); i++) {
+char B=p[i];
+if(!isupper(B)) continue;
+bool eps=true;
+for(int j=i+1; j<p.size(); j++) {
+set<char> f=FIRST(p[j]);
+for(char x:f)
+if(x!='#')
+change |= follow[B].insert(x).second;
+if(!f.count('#')) {
+eps=false;
+break;
+}
+}
+if(eps)
+for(char x:follow[A])
+change |= follow[B].insert(x).second;
+}
+}
+cout << "FIRST SETS:\n";
+
+for(char c : {'E','X','T','Y','F'}) {
+cout << "FIRST(" << c << ") = { ";
+for(char x:first[c]) cout << x << " ";
+cout << "}\n";
+}
+cout << "\nFOLLOW SETS:\n";
+
+for(char c : {'E','X','T','Y','F'}) {
+cout << "FOLLOW(" << c << ") = { ";
+for(char x:follow[c]) cout << x << " ";
+cout << "}\n";
+}
+
+return 0;
+}

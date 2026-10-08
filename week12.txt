@@ -1,0 +1,37 @@
+REQUIREMENTS :
+• Two computers
+• Ethernet cable / common Wi-Fi network
+• Windows operating system
+• Command Prompt
+PROCEDURE :
+Step 1 - Connect the computers
+Connect both computers to the same:
+• Wi-Fi network, or
+• LAN/Ethernet network
+Step 2 - Find the IP address
+On both computers, open Command Prompt and execute:
+ipconfig
+Note the IPv4 Address
+For example:
+Computer 1 → 192.168.1.10
+Computer 2 → 192.168.1.11
+Step 3 - Check the subnet
+The subnet mask should normally be the same, for example:
+255.255.255.0
+Step 4 — Test connectivity
+From Computer 1, execute:
+ping 192.168.1.11
+From Computer 2, execute:
+ping 192.168.1.10
+If the connection is successful, the output will contain:
+Reply from 192.168.1.11
+This confirms that the two computers can communicate.
+Step 5 — Verify network information
+Use:
+ipconfig /all
+This displays detailed information such as:
+• IP address
+• Subnet mask
+• Default gateway
+• MAC address
+• DNS server

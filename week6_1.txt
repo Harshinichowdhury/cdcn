@@ -1,0 +1,117 @@
+grammar:
+E → E + T | T
+T → T * F | F
+F → ( E ) | id
+
+Step 1 — YACC file
+Create:ast.y
+
+
+
+
+PROGRAM:
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    char value;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *root;
+
+struct Node* node(char value, struct Node *left, struct Node *right)
+{
+    struct Node *n = malloc(sizeof(struct Node));
+    n->value = value;
+    n->left = left;
+    n->right = right;
+    return n;
+}
+
+void print(struct Node *r, int space)
+{
+    if (r == NULL)
+        return;
+
+    space += 5;
+
+    print(r->right, space);
+
+    printf("\n");
+    for (int i = 5; i < space; i++)
+        printf(" ");
+
+    printf("%c\n", r->value);
+
+    print(r->left, space);
+}
+%}
+
+%union
+{
+    struct Node *ptr;
+}
+
+%token <ptr> ID
+%type <ptr> E T F
+
+%%
+
+E : E '+' T   { $$ = node('+', $1, $3); root = $$; }
+  | T         { $$ = $1; root = $$; }
+  ;
+
+T : T '*' F   { $$ = node('*', $1, $3); }
+  | F         { $$ = $1; }
+  ;
+
+F : '(' E ')' { $$ = $2; }
+  | ID        { $$ = $1; }
+  ;
+
+%%
+
+int yylex()
+{
+    char c = getchar();
+
+    if (c == 'i')
+    {
+        yylval.ptr = node('i', NULL, NULL);
+        return ID;
+    }
+
+    return c;
+}
+
+int yyerror(char *s)
+{
+    printf("Invalid expression\n");
+    return 0;
+}
+
+int main()
+{
+    printf("Enter expression using i for id: ");
+    yyparse();
+
+    printf("\nAbstract Syntax Tree:\n");
+    print(root, 0);
+
+    return 0;
+}
+
+
+STEPS TO EXECUTE:
+Step 1
+Generate parser:yacc -d ast.y
+Step 2
+Compile:gcc y.tab.c -o ast
+Step 3
+Run:./ast
+Enter:i+i*i

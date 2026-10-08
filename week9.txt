@@ -1,0 +1,83 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Character Framing
+void characterFraming(string data)
+{
+    cout << "Character Framing: ";
+    cout << "FLAG " << data << " FLAG" << endl;
+}
+
+// Character Stuffing
+void characterStuffing(string data)
+{
+    char flag = 'F';
+    char escape = 'E';
+
+    string stuffed = "";
+
+    for (char ch : data)
+    {
+        if (ch == flag || ch == escape)
+        {
+            stuffed += escape;
+        }
+
+        stuffed += ch;
+    }
+
+    cout << "Character Stuffing: ";
+    cout << "F " << stuffed << " F" << endl;
+}
+
+// Bit Stuffing
+void bitStuffing(string data)
+{
+    string stuffed = "";
+    int count = 0;
+
+    for (char bit : data)
+    {
+        stuffed += bit;
+
+        if (bit == '1')
+        {
+            count++;
+
+            // Insert 0 after five consecutive 1s
+            if (count == 5)
+            {
+                stuffed += '0';
+                count = 0;
+            }
+        }
+        else
+        {
+            count = 0;
+        }
+    }
+
+    cout << "Bit Stuffing: ";
+    cout << "01111110 " << stuffed << " 01111110" << endl;
+}
+
+int main()
+{
+    string charData;
+    string bitData;
+
+    cout << "Enter character data: ";
+    cin >> charData;
+
+    cout << "Enter binary data: ";
+    cin >> bitData;
+
+    cout << "\n--- Framing Results ---\n";
+
+    characterFraming(charData);
+    characterStuffing(charData);
+    bitStuffing(bitData);
+
+    return 0;
+}

@@ -1,0 +1,98 @@
+Grammar:
+E  → T E'
+E' → + T E' | ε
+T  → F T'
+T' → * F T' | ε
+F  → ( E ) | id
+
+ input: id + id * id
+
+
+ Program:
+ #include <iostream>
+#include <string>
+using namespace std;
+
+string input;
+int pos = 0;
+
+void E();
+void Eprime();
+void T();
+void Tprime();
+void F();
+
+void E()
+{
+    T();
+    Eprime();
+}
+
+void Eprime()
+{
+    if (input[pos] == '+')
+    {
+        pos++;
+        T();
+        Eprime();
+    }
+}
+
+void T()
+{
+    F();
+    Tprime();
+}
+
+void Tprime()
+{
+    if (input[pos] == '*')
+    {
+        pos++;
+        F();
+        Tprime();
+    }
+}
+
+void F()
+{
+    if (input[pos] == 'i')
+    {
+        pos++;
+    }
+    else if (input[pos] == '(')
+    {
+        pos++;
+        E();
+
+        if (input[pos] == ')')
+            pos++;
+        else
+        {
+            cout << "Invalid input";
+            exit(0);
+        }
+    }
+    else
+    {
+        cout << "Invalid input";
+        exit(0);
+    }
+}
+
+int main()
+{
+    cout << "Enter expression using i for id: ";
+    cin >> input;
+
+    input += '$';
+
+    E();
+
+    if (input[pos] == '$')
+        cout << "Valid Expression";
+    else
+        cout << "Invalid Expression";
+
+    return 0;
+}
